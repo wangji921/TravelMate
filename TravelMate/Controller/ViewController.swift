@@ -69,10 +69,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 //        UIView.animate(withDuration: 0.5, animations:{ self.blackView.alpha = 0})
 //    }
     
-    let menu = moreMenu()
+    lazy var menu: moreMenu = {
+        let launcher = moreMenu()
+        launcher.homeController = self
+        return launcher
+    }()
     
     @objc func handleMore() {
-        menu.More()
+//        menu.homeController = self
+        menu.showMore()
+        
+//       showControllerForSettings()
+    }
+    
+    func showControllerForSetting(setting: Setting) {
+        let dummySettingsViewController = UIViewController()
+        dummySettingsViewController.view.backgroundColor = UIColor.white
+        dummySettingsViewController.navigationItem.title = setting.name
+//        navigationController?.navigationBar.tintColor = UIColor.white
+//        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.blue]
+        navigationController?.pushViewController(dummySettingsViewController, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
