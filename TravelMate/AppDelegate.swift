@@ -21,6 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
         GMSPlacesClient.provideAPIKey("AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+        
+        let masterViewControler = ViewController()
+        let navigationController = UINavigationController(rootViewController: masterViewControler)
+        window?.rootViewController = navigationController
+        
         return true
     }
 
