@@ -39,6 +39,59 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         
         setupNavBarButtons()
+        
+        
+        
+//        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-36.8808,174.7078&radius=5000&type=bank&keyword=anz&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+//            let task = URLSession.shared.dataTask(with: url as URLRequest) { (data, response, error) in
+//
+//                if error != nil {
+//                    print(error!)
+//                } else {
+//
+//                    if let urlContent = data {
+//                        do {
+//                            let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+//
+//                            print(jsonResult)
+//                            print(jsonResult["name"]!!)
+//                        } catch {
+//                            print("JSON processing failed")
+//                        }
+//                    }
+//                }
+//            }
+//            task.resume()
+        
+        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-36.8808,174.7078&radius=50000&type=bank&keyword=anz&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+        if let usableUrl = url {
+            let request = URLRequest(url: usableUrl)
+            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+//                if let data = data {
+//                    if let stringData = String(data: data, encoding: String.Encoding.utf8) {
+//                        print(stringData) //JSONSerialization
+//                    }
+//                }
+                
+                if error != nil {
+                    print(error!)
+                } else {
+                    
+                    if let urlContent = data {
+                        do {
+                            let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                            
+//                            print(jsonResult)
+                            print(jsonResult["results"])
+                        } catch {
+                            print("JSON processing failed")
+                        }
+                    }
+                }
+            })
+            task.resume()
+        }
+        
     }
     
     func setupNavBarButtons() {
@@ -95,7 +148,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    
 
 }
 
