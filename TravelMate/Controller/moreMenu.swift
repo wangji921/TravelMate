@@ -116,9 +116,33 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
         }) { (completed: Bool) in
             
             let setting = self.settings[indexPath.item]
-            if setting.name != "Cancel" {
+            
+            switch setting.name {
+            case "Cancel":
+                print("cancel")
+            case "Bank":
+                self.homeController?.searchPlaces()
+            case "Supermarket":
+                self.homeController?.searchPlaces()
+            case "Toilet":
+                self.homeController?.searchPlaces()
+            case "Train Station":
+                self.homeController?.searchPlaces()
+            case "Police Station":
+                self.homeController?.searchPlaces()
+            default:
                 self.homeController?.showControllerForSetting(setting: setting)
             }
+            
+//            if setting.name != "Cancel" {
+//                if setting.name == "Bank" || setting.name == "Supermarket" {
+//                    self.homeController?.searchPlaces()
+//                } else {
+//                    self.homeController?.showControllerForSetting(setting: setting)
+//                }
+//
+//
+//            }
             
         }
         

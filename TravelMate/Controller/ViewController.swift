@@ -22,6 +22,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     var placeIdList = [String]()
     var latList = [Double]()
     var lngList = [Double]()
+    var vicinityList = [String]()
+    
+    var nameListBank = [String]()
+    var placeIdListBank = [String]()
+    var latListBank = [Double]()
+    var lngListBank = [Double]()
+    
+    var nameListToilet = [String]()
+    var placeIdListToilet = [String]()
+    var latListToilet = [Double]()
+    var lngListToilet = [Double]()
     
     let semaphore = DispatchSemaphore(value: 0)
 
@@ -29,7 +40,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let camera = GMSCameraPosition.camera(withLatitude: -40.9006, longitude: 174.8860, zoom: 5.0)
+        let camera = GMSCameraPosition.camera(withLatitude: -36.8485, longitude: 174.7633, zoom: 12.0)
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
@@ -56,11 +67,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         setupNavBarButtons()
         
-        getJSON()
+        getJSON("toilet")
         
         _ = semaphore.wait(timeout: .distantFuture)
         
-        addMarker(mapView: mapView)
+        addMarker(mapView)
         
     }
     
@@ -70,10 +81,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         navigationItem.rightBarButtonItem = moreButton
     }
     
-    func getJSON() {
+    func getJSON(_ type: String) {
 //        var placesFound = [String]()
         
-        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(lat),\(lng)&radius=50000&type=bank&keyword=anz&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(lat),\(lng)&radius=3000&type=\(type)&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
             
@@ -95,10 +106,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
                                     let location = geometry?["location"] as? [String: Double]
                                     let lat = location?["lat"]
                                     let lng = location?["lng"]
+                                    let vicinity = result["vicinity"] as? String
                                     self.nameList.append(name!)
                                     self.placeIdList.append(placeId!)
                                     self.latList.append(lat!)
                                     self.lngList.append(lng!)
+                                    self.vicinityList.append(vicinity!)
                                 }
                             }
                         } catch {
@@ -112,11 +125,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         }
     }
     
-    func addMarker(mapView: GMSMapView) {
+    func searchPlaces() {
+        print("pressed")
+    }
+    
+    func addMarker(_ mapView: GMSMapView) {
         for i in 0..<nameList.count {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(latitude: latList[i], longitude: lngList[i])
             marker.title = nameList[i]
+            marker.snippet = vicinityList[i]
             marker.map = mapView
         }
     }
