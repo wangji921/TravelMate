@@ -9,10 +9,21 @@
 import UIKit
 import GoogleMaps
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
+    
+    
     
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation?
+    var lat: Double = 0
+    var lng: Double = 0
+    
+    var nameList = [String]()
+    var placeIdList = [String]()
+    var latList = [Double]()
+    var lngList = [Double]()
+    
+    let semaphore = DispatchSemaphore(value: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +35,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         mapView.settings.compassButton = true
         mapView.isMyLocationEnabled = true
         view = mapView
+        
+        mapView.delegate = self
         
 //        let marker = GMSMarker()
 //        marker.position = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
@@ -38,34 +51,32 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
         locationManager.delegate = self
         
+        lat = (locationManager.location?.coordinate.latitude)!
+        lng = (locationManager.location?.coordinate.longitude)!
+        
         setupNavBarButtons()
         
+        getJSON()
         
+        _ = semaphore.wait(timeout: .distantFuture)
         
-//        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-36.8808,174.7078&radius=5000&type=bank&keyword=anz&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
-//            let task = URLSession.shared.dataTask(with: url as URLRequest) { (data, response, error) in
-//
-//                if error != nil {
-//                    print(error!)
-//                } else {
-//
-//                    if let urlContent = data {
-//                        do {
-//                            let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-//
-//                            print(jsonResult)
-//                            print(jsonResult["name"]!!)
-//                        } catch {
-//                            print("JSON processing failed")
-//                        }
-//                    }
-//                }
-//            }
-//            task.resume()
+        addMarker(mapView: mapView)
         
-        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-36.8808,174.7078&radius=50000&type=bank&keyword=anz&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+    }
+    
+    func setupNavBarButtons() {
+        let moreButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more"), style: .plain, target: self, action: #selector(handleMore))
+        
+        navigationItem.rightBarButtonItem = moreButton
+    }
+    
+    func getJSON() {
+//        var placesFound = [String]()
+        
+        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(lat),\(lng)&radius=50000&type=bank&keyword=anz&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
+            
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
                 if error != nil {
                     print(error!)
@@ -77,14 +88,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                             
                             if let results = jsonResult["results"] as? [[String: AnyObject]] {
                                 for result in results {
-                                    print(result)
+//                                    print(result)
                                     let name = result["name"] as? String
                                     let placeId = result["place_id"] as? String
                                     let geometry = result["geometry"] as? [String: AnyObject]
                                     let location = geometry?["location"] as? [String: Double]
                                     let lat = location?["lat"]
                                     let lng = location?["lng"]
-                                    
+                                    self.nameList.append(name!)
+                                    self.placeIdList.append(placeId!)
+                                    self.latList.append(lat!)
+                                    self.lngList.append(lng!)
                                 }
                             }
                         } catch {
@@ -92,18 +106,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                         }
                     }
                 }
+                self.semaphore.signal()
             })
             task.resume()
         }
-        
     }
     
-    func setupNavBarButtons() {
-        let moreButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more"), style: .plain, target: self, action: #selector(handleMore))
-        
-        navigationItem.rightBarButtonItem = moreButton
+    func addMarker(mapView: GMSMapView) {
+        for i in 0..<nameList.count {
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(latitude: latList[i], longitude: lngList[i])
+            marker.title = nameList[i]
+            marker.map = mapView
+        }
     }
-    
     
 //    let blackView = UIView()
 //
@@ -152,8 +168,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
 
 }
 
