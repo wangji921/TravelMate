@@ -67,22 +67,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
-//                if let data = data {
-//                    if let stringData = String(data: data, encoding: String.Encoding.utf8) {
-//                        print(stringData) //JSONSerialization
-//                    }
-//                }
-                
                 if error != nil {
                     print(error!)
                 } else {
                     
-                    if let urlContent = data {
+                    if let data = data {
                         do {
-                            let jsonResult = try JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                            let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
                             
-//                            print(jsonResult)
-                            print(jsonResult["results"])
+                            if let results = jsonResult["results"] as? [[String: AnyObject]] {
+                                for result in results {
+                                    print(result)
+                                    let name = result["name"] as? String
+                                    let placeId = result["place_id"] as? String
+                                    let geometry = result["geometry"] as? [String: AnyObject]
+                                    let location = geometry?["location"] as? [String: Double]
+                                    let lat = location?["lat"]
+                                    let lng = location?["lng"]
+                                    
+                                }
+                            }
                         } catch {
                             print("JSON processing failed")
                         }
