@@ -34,6 +34,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     var latListToilet = [Double]()
     var lngListToilet = [Double]()
     
+    var mapView: GMSMapView!
+    
     let semaphore = DispatchSemaphore(value: 0)
 
     override func viewDidLoad() {
@@ -41,7 +43,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         // Do any additional setup after loading the view, typically from a nib.
         
         let camera = GMSCameraPosition.camera(withLatitude: -36.8485, longitude: 174.7633, zoom: 12.0)
-        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.settings.myLocationButton = true
         mapView.settings.compassButton = true
         mapView.isMyLocationEnabled = true
@@ -67,11 +69,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         
         setupNavBarButtons()
         
-        getJSON("toilet")
-        
-        _ = semaphore.wait(timeout: .distantFuture)
-        
-        addMarker(mapView)
+//        getJSON("toilet")
+//
+//        _ = semaphore.wait(timeout: .distantFuture)
+//
+//        addMarker(mapView)
         
     }
     
@@ -84,9 +86,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     func getJSON(_ type: String) {
 //        var placesFound = [String]()
         
-        let url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(lat),\(lng)&radius=3000&type=\(type)&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+        var url: URL!
+        
+        if type == "police" || type == "train_station" {
+            url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(lat),\(lng)&radius=9000&type=\(type.lowercased())&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+        }
+        else {
+            url = URL(string: "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(lat),\(lng)&radius=3000&type=\(type.lowercased())&key=AIzaSyAFtyOmHHbOw5-jqGYR0racTRMb8mcPa9o")
+        }
         if let usableUrl = url {
             let request = URLRequest(url: usableUrl)
+            
+            nameList.removeAll()
+            vicinityList.removeAll()
+            latList.removeAll()
+            lngList.removeAll()
+            placeIdList.removeAll()
             
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
                 if error != nil {
@@ -125,11 +140,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         }
     }
     
-    func searchPlaces() {
-        print("pressed")
+    func searchPlaces(_ type: String) {
+        getJSON(type)
+        _ = semaphore.wait(timeout: .distantFuture)
+        addMarker(mapView)
     }
     
     func addMarker(_ mapView: GMSMapView) {
+        mapView.clear()
         for i in 0..<nameList.count {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(latitude: latList[i], longitude: lngList[i])
@@ -169,7 +187,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     @objc func handleMore() {
 //        menu.homeController = self
         menu.showMore()
-        
 //       showControllerForSettings()
     }
     

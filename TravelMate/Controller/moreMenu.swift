@@ -120,18 +120,16 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
             switch setting.name {
             case "Cancel":
                 print("cancel")
-            case "Bank":
-                self.homeController?.searchPlaces()
-            case "Supermarket":
-                self.homeController?.searchPlaces()
-            case "Toilet":
-                self.homeController?.searchPlaces()
-            case "Train Station":
-                self.homeController?.searchPlaces()
-            case "Police Station":
-                self.homeController?.searchPlaces()
-            default:
+            case "Settings":
                 self.homeController?.showControllerForSetting(setting: setting)
+            case "About":
+                self.homeController?.showControllerForSetting(setting: setting)
+            case "Train Station":
+                self.homeController?.searchPlaces("train_station")
+            case "Police Station":
+                self.homeController?.searchPlaces("police")
+            default:
+                self.homeController?.searchPlaces(setting.name)
             }
             
 //            if setting.name != "Cancel" {
