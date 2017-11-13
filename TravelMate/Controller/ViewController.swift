@@ -35,6 +35,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     var mapView: GMSMapView!
     
     let semaphore = DispatchSemaphore(value: 0)
+    
+    var name: UILabel!
+    var email: UILabel!
+    var phone: UILabel!
+    var descr: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -189,12 +194,52 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     }
     
     func showControllerForSetting(setting: Setting) {
+//        let dummySettingsViewController = UIViewController()
+//        dummySettingsViewController.view.backgroundColor = UIColor.white
+//        dummySettingsViewController.navigationItem.title = setting.name
+//        navigationController?.pushViewController(dummySettingsViewController, animated: true)
+        
+        if mapView.mapType == GMSMapViewType.satellite {
+            mapView.mapType = GMSMapViewType.normal
+        } else {
+            mapView.mapType = GMSMapViewType.satellite
+        }
+    }
+    
+    func showControllerForAbout(setting: Setting) {
         let dummySettingsViewController = UIViewController()
         dummySettingsViewController.view.backgroundColor = UIColor.white
         dummySettingsViewController.navigationItem.title = setting.name
-//        navigationController?.navigationBar.tintColor = UIColor.white
-//        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.blue]
+        //        navigationController?.navigationBar.tintColor = UIColor.white
+        //        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.blue]
         navigationController?.pushViewController(dummySettingsViewController, animated: true)
+        name = UILabel()
+        name.text = "Team Name: ###"
+        name.font = UIFont.boldSystemFont(ofSize: 36)
+        name.sizeToFit()
+        name.center = CGPoint(x: 200, y: 200)
+        dummySettingsViewController.view.addSubview(name)
+        
+        email = UILabel()
+        email.text = "Email:  ios@Myunitec.ac.nz "
+        email.font = UIFont.boldSystemFont(ofSize: 22)
+        email.sizeToFit()
+        email.center = CGPoint(x: 200, y: 260)
+        dummySettingsViewController.view.addSubview(email)
+        
+        phone = UILabel()
+        phone.text = "Phone:  021221211 "
+        phone.font = UIFont.boldSystemFont(ofSize: 22)
+        phone.sizeToFit()
+        phone.center = CGPoint(x: 200, y: 300)
+        dummySettingsViewController.view.addSubview(phone)
+        
+        descr = UILabel()
+        descr.text = "Hopfully It Can Help You =3="
+        descr.font = UIFont.boldSystemFont(ofSize: 18)
+        descr.sizeToFit()
+        descr.center = CGPoint(x: 200, y: 500)
+        dummySettingsViewController.view.addSubview(descr)
     }
 
     override func didReceiveMemoryWarning() {

@@ -33,7 +33,7 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
     let cellHeight: CGFloat = 50
     
     let settings: [Setting] = {
-        return [Setting(name: "Settings", imageName: "settings"),
+        return [Setting(name: "Map / Satellite", imageName: "earth"),
                 Setting(name: "Bank", imageName: "bank"),
                 Setting(name: "Supermarket", imageName: "supermarket"),
                 Setting(name: "Toilet", imageName: "toilet"),
@@ -120,10 +120,10 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
             switch setting.name {
             case "Cancel":
                 print("cancel")
-            case "Settings":
+            case "Map / Satellite":
                 self.homeController?.showControllerForSetting(setting: setting)
             case "About":
-                self.homeController?.showControllerForSetting(setting: setting)
+                self.homeController?.showControllerForAbout(setting: setting)
             default:
                 self.homeController?.searchPlaces(setting.imageName)
             }
