@@ -94,11 +94,9 @@ class SettingCell: BaseCell {
 
 //        backgroundColor = UIColor.blue
         
-        addConstraintsWithFormat(format: "H:|-8-[v0(30)]-8-[v1]|", views: iconImageView, nameLabel)
-        
+        addConstraintsWithFormat(format: "H:|-20-[v0(18)]-20-[v1]|", views: iconImageView, nameLabel)
         addConstraintsWithFormat(format: "V:|[v0]|", views: nameLabel)
-        
-        addConstraintsWithFormat(format: "V:|-10-[v0(30)]|", views: iconImageView)
+        addConstraintsWithFormat(format: "V:|-16-[v0(19)]|", views: iconImageView)
         
 //        addConstraint(NSLayoutConstraint(item: iconImageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
         

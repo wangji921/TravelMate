@@ -35,10 +35,10 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
     let settings: [Setting] = {
         return [Setting(name: "Settings", imageName: "settings"),
                 Setting(name: "Bank", imageName: "bank"),
-                Setting(name: "Supermarket", imageName: "shoppingcart"),
+                Setting(name: "Supermarket", imageName: "supermarket"),
                 Setting(name: "Toilet", imageName: "toilet"),
-                Setting(name: "Police Station", imageName: "policestation"),
-                Setting(name: "Train Station", imageName: "trainstation"),
+                Setting(name: "Police Station", imageName: "police"),
+                Setting(name: "Train Station", imageName: "train_station"),
                 Setting(name: "About", imageName: "about"),
                 Setting(name: "Cancel", imageName: "cancel")]
     }()
@@ -124,23 +124,9 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
                 self.homeController?.showControllerForSetting(setting: setting)
             case "About":
                 self.homeController?.showControllerForSetting(setting: setting)
-            case "Train Station":
-                self.homeController?.searchPlaces("train_station")
-            case "Police Station":
-                self.homeController?.searchPlaces("police")
             default:
-                self.homeController?.searchPlaces(setting.name)
+                self.homeController?.searchPlaces(setting.imageName)
             }
-            
-//            if setting.name != "Cancel" {
-//                if setting.name == "Bank" || setting.name == "Supermarket" {
-//                    self.homeController?.searchPlaces()
-//                } else {
-//                    self.homeController?.showControllerForSetting(setting: setting)
-//                }
-//
-//
-//            }
             
         }
         
@@ -151,7 +137,6 @@ class moreMenu: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, 
         
         collectionView.dataSource = self
         collectionView.delegate = self
-        
         collectionView.register(SettingCell.self, forCellWithReuseIdentifier: cellId)
     }
     

@@ -11,8 +11,6 @@ import GoogleMaps
 
 class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
-    
-    
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation?
     var lat: Double = 0
@@ -79,8 +77,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     
     func setupNavBarButtons() {
         let moreButton = UIBarButtonItem(image: #imageLiteral(resourceName: "more"), style: .plain, target: self, action: #selector(handleMore))
-        
         navigationItem.rightBarButtonItem = moreButton
+        navigationItem.title = "Travel Mate"
     }
     
     func getJSON(_ type: String) {

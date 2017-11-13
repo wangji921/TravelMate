@@ -56,7 +56,7 @@
 		966531A41FB060E300AE85CA /* TravelMateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelMateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		966531A81FB060E300AE85CA /* TravelMateUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelMateUITests.swift; sourceTree = "<group>"; };
 		966531AA1FB060E300AE85CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		966531B61FB08E6300AE85CA /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		966531B61FB08E6300AE85CA /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		96C1F4EC5DE512025AF35C0C /* Pods-TravelMate.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelMate.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TravelMate/Pods-TravelMate.debug.xcconfig"; sourceTree = "<group>"; };
 		96CAAE0C1FB2FBCE00FA4E82 /* moreMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moreMenu.swift; sourceTree = "<group>"; };
 		96CAAE0E1FB4204800FA4E82 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
